@@ -14,7 +14,12 @@ def job():
 
 
 if __name__ == "__main__":
+    data = get_data_kafka_group()
+    consumer_group_lag = get_lag(data)
+    telebot(consumer_group_lag)
+    ''''
     schedule.every(30).seconds.do(job)
     while True:
         schedule.run_pending()
         time.sleep(1)
+    '''
