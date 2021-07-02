@@ -18,6 +18,7 @@ def get_lag(data):
     for key, value in groups_data.items():
         for group in value:
             if group["groupId"] in TeleBotConfig.consumer_group:
+                logger.info(f'GROUP NAME: {group["groupId"]}')
                 for topic in group["topicOffsets"]:
                     if topic["summedLag"] >= 100:
                         result.append(
