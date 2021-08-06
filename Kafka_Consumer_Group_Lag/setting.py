@@ -10,3 +10,6 @@ class TeleBotConfig:
     chat_id = os.getenv("CHAT_ID")
     kowl_api = os.getenv("KOWL_API")
     consumer_group = os.getenv("CONSUMER_GROUP").split(",")
+    heathcheck = os.getenv("HEATHCHECK")
+    mqtt_url = os.getenv("MQTT_URL")
+    mqtt_node = os.getenv("MQTT_NODE")

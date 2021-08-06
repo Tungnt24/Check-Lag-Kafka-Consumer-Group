@@ -14,6 +14,7 @@ def get_data_kafka_group():
 
 def get_lag(data):
     result = []
+    total_lag = []
     groups_data = json.loads(data)
     for key, value in groups_data.items():
         for group in value:
@@ -21,9 +22,12 @@ def get_lag(data):
                 logger.info(f'GROUP NAME: {group["groupId"]}')
                 for topic in group["topicOffsets"]:
                     if topic["summedLag"] >= 100:
-                        result.append(
-                            f"{group['groupId']} | total lag: {topic['summedLag']}"
-                        )
+                        total_lag.append(topic['summedLag'])
+                if sum(total_lag) >= 100:
+                    result.append(
+                        f"{group['groupId']} | total lag: {sum(total_lag)}"
+                    )
+                    total_lag.clear()
     return result
 
 
@@ -38,3 +42,7 @@ def telebot(consumer_group_lag):
             f"``` {text_format} ```",
         )
     )
+
+def telebot_mqtt(content):
+    api = TeleBotConfig.api
+    requests.post(api.format(TeleBotConfig.token, TeleBotConfig.chat_id, f"{content}"))
