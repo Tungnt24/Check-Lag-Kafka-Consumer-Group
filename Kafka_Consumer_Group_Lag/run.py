@@ -24,7 +24,12 @@ def job_2():
     Queue Drop: {metrics.get("queue_drop")}
     Queue Unhandled: {metrics.get("queue_unhandled")}
     """
-    telebot_mqtt(content)
+    if metrics.get("queue_in") - metrics.get("queue_out") >= 200:
+        telebot_mqtt(content)
+    try:
+        requests.get(TeleBotConfig.heathcheck, timeout=20)
+    except requests.RequestException as e:
+        logger.info("Ping failed: %s" % e)
 
 def job():
     data = get_data_kafka_group()
@@ -38,12 +43,7 @@ def job():
 
 
 if __name__ == "__main__":
-    schedule.every(5).minutes.do(job_2)
+    schedule.every(4).minutes.do(job_2)
     while True:
         schedule.run_pending()
         time.sleep(1)
-    #schedule.every(4).minutes.do(job)
-
-    #while True:
-        #schedule.run_pending()
-        #time.sleep(1)

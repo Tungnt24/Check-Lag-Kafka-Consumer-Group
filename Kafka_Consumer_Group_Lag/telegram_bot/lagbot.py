@@ -45,4 +45,5 @@ def telebot(consumer_group_lag):
 
 def telebot_mqtt(content):
     api = TeleBotConfig.api
+    logger.info(f"SENDING MESSAGE: {content}")
     requests.post(api.format(TeleBotConfig.token, TeleBotConfig.chat_id, f"{content}"))
